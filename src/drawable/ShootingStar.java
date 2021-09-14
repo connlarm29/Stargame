@@ -5,23 +5,25 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-public class Tree extends Drawable{
+public class ShootingStar extends Drawable{
 
     BufferedImage currentImage, spriteSheet;
     private int offset = 0; // ether 0 or 32, depending on which image is selected
     private int spriteLifetime = 0;
 
-    private final int IMG_HEIGHT = 64,
+    private final int IMG_HEIGHT = 32,
     IMG_WIDTH = 32;
 
+    private boolean reverse = false;
 
-    public Tree(int x, int y, int layer) {
+
+    public ShootingStar(int x, int y, int layer) {
         super(layer);
 
         this.sizeX = IMG_WIDTH*2;
         this.sizeY = IMG_HEIGHT*2;
-        this.x = x;
-        this.y = y-sizeY;
+        this.x = x-sizeX/2;
+        this.y = y-sizeY/2;
 
         try {
             spriteSheet = ImageIO.read(this.getClass().getResource("star.png"));
@@ -50,16 +52,18 @@ public class Tree extends Drawable{
     public void onUpdate()
     {
         ++spriteLifetime;
-        if(spriteLifetime == 4)
+        if(spriteLifetime == 8)
         {
-            switch(offset)
+            if(reverse)
             {
-            case 0:
-                offset = 32;
-                break;
-            case 32:
-                offset = 0;
-                break;
+                offset -= 32;
+            }else{
+                offset += 32;
+            }
+
+            if(offset == 0 || offset == 64)
+            {
+                reverse = !reverse;
             }
             currentImage = getCurrentSubImage();
             spriteLifetime = 0;

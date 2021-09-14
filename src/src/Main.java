@@ -1,6 +1,14 @@
+/*
+todo:
+    Add Keylistener
+    Add Player
+    Add house growing function
+ */
+
 package src;
 
 import drawable.*;
+import sun.security.krb5.internal.crypto.Des;
 
 public class Main
 {
@@ -18,12 +26,14 @@ public class Main
         //SpinningMeme p = new SpinningMeme();
         Background background = new Background();
         Ground ground = new Ground();
-        Tree tree1 = new Tree(200,300,-1);
+        ShootingStar shootingStar1 = new ShootingStar(400,64,-1);
+
+        DestructableHouse houseTest = new DestructableHouse(400,410);
+        RenderManager.addObjectToRenderQueue(houseTest);
 
         RenderManager.addObjectToRenderQueue(ground);
-        //RenderManager.addObjectToRenderQueue(p);
         RenderManager.addObjectToRenderQueue(background);
-        RenderManager.addObjectToRenderQueue(tree1);
+        RenderManager.addObjectToRenderQueue(shootingStar1);
         Drawable.spawnLogicThread();
 
         /*

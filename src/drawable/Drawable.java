@@ -6,10 +6,13 @@ import src.WindowManager;
 import java.awt.*;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 public class Drawable {
 
-    private static ArrayList<Drawable> updateQueue = new ArrayList<>();
+    private static List<Drawable> updateQueue = Collections.synchronizedList(new ArrayList());
     private static boolean updateThreadExists = false;
     private final int renderPriority;
 
@@ -31,7 +34,7 @@ public class Drawable {
 
     }
 
-    static void addObjectToUpdateQueue(Drawable obj)
+    static synchronized void addObjectToUpdateQueue(Drawable obj)
     {
         if(!Drawable.updateQueue.contains(obj))
         {
@@ -63,15 +66,22 @@ public class Drawable {
 
         {
             Drawable.updateThreadExists = true;
+            Iterator<Drawable> iterator = Drawable.updateQueue.iterator();
             new Thread(() ->
                 {
                     Thread.currentThread().setName("Object Logic Thread");
                     while (!WindowManager.exitStatus) {
                         long startTime = System.currentTimeMillis();
 
-                        for (Drawable d : Drawable.updateQueue) {
+//                        for (Iterator<Drawable> it = iterator; it.hasNext(); ) {
+//                            Drawable d = it.next();
+//                            d.onUpdate();
+//
+//                        }
+                        iterator.forEachRemaining(d -> {
                             d.onUpdate();
-                        }
+                            System.out.print("a");
+                        });
 
                         long deltaTime = System.currentTimeMillis() - startTime;
 

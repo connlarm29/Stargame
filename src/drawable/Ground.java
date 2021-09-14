@@ -14,7 +14,7 @@ public class Ground extends Drawable{
 
     public Ground()
     {
-        super(0);
+        super(99);
         this.sizeX = 200 * 4;
         this.sizeY = 32 * 4;
 

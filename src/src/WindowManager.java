@@ -23,6 +23,8 @@ public class WindowManager extends RenderManager
     {
         gameWindow.setSize(WindowManager.WIN_WIDTH, WindowManager.WIN_HEIGHT);
         gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        gameWindow.setResizable(false);
+        gameWindow.setTitle("I need sleep");
         gameWindow.setVisible(true);
         System.out.println("I ["+LocalTime.now()+
                 "] Successfully initialized game window.");
