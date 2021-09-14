@@ -1,5 +1,8 @@
 package drawable;
 
+import src.RenderManager;
+import src.WindowManager;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -67,17 +70,23 @@ public class DestructableHouse extends Drawable{
     {
         ++framesPassed;
 
-        if(framesPassed == 60)
+        if(y >= WindowManager.WIN_HEIGHT)
         {
-            DestructableHouse.existingHouses.add(
-                    new DestructableHouse(
-                            rand.nextInt(800),
-                            y-16
-                    )
-            );
-            framesPassed = 0;
+            HouseObjectSpawner.removeHouseFromList(this);
         }
 
+        if(framesPassed == 30 && !destroyed)
+        {
+            yImgPos = 1;
+            currentImage = getCurrentSubImage();
+            destroyed = true;
+            framesPassed = 0;
+        }
+        else if(framesPassed == 15 && destroyed)
+        {
+            y += 5;
+            framesPassed = 0;
+        }
     }
 
     private BufferedImage getCurrentSubImage()

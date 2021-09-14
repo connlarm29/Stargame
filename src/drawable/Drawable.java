@@ -7,7 +7,6 @@ import java.awt.*;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 public class Drawable {
@@ -51,6 +50,23 @@ public class Drawable {
         }
     }
 
+    public static synchronized void removeObjectFromUpdateQueue(Drawable objectToRemove)
+    {
+        if(Drawable.updateQueue.contains(objectToRemove))
+        {
+            Drawable.updateQueue.remove(objectToRemove);
+            System.out.println("I ["+ LocalTime.now()+
+                    "] Successfully deleted [."+objectToRemove.toString()+
+                    "] from drawable updateQueue.");
+        }
+        else
+        {
+            System.out.println("E ["+ LocalTime.now()+
+                    "] Could not delete [."+objectToRemove.toString()+
+                    "] from drawable updateQueue, doesn't exist!");
+        }
+    }
+
     public void onUpdate()
     {
 
@@ -66,7 +82,6 @@ public class Drawable {
 
         {
             Drawable.updateThreadExists = true;
-            Iterator<Drawable> iterator = Drawable.updateQueue.iterator();
             new Thread(() ->
                 {
                     Thread.currentThread().setName("Object Logic Thread");
@@ -78,10 +93,14 @@ public class Drawable {
 //                            d.onUpdate();
 //
 //                        }
-                        iterator.forEachRemaining(d -> {
-                            d.onUpdate();
-                            System.out.print("a");
-                        });
+//                        for(Drawable d : Drawable.updateQueue)
+//                        {
+//                            d.onUpdate();
+//                        }
+                        for(int i = 0; i < Drawable.updateQueue.size(); i++)
+                        {
+                            Drawable.updateQueue.get(i).onUpdate();
+                        }
 
                         long deltaTime = System.currentTimeMillis() - startTime;
 

@@ -44,10 +44,11 @@ public class RenderManager extends JPanel implements Runnable
         graphics2DObject.fillRect(0,0, WindowManager.WIN_WIDTH, WindowManager.WIN_HEIGHT);
         graphics2DObject.setColor(Color.BLACK);
 
-        if(RenderManager.renderQueue.size() > 0) {
-            for (Drawable d : RenderManager.renderQueue)
+        if(RenderManager.renderQueue.size() > 0)
+        {
+            for(int i = 0; i < RenderManager.renderQueue.size(); i++)
             {
-                d.toRender(graphics2DObject);
+                RenderManager.renderQueue.get(i).toRender(graphics2DObject);
             }
         }
 
@@ -97,7 +98,7 @@ public class RenderManager extends JPanel implements Runnable
             }
         }
     }
-    static void addObjectToRenderQueue(Drawable objectToAdd)
+    public static synchronized void addObjectToRenderQueue(Drawable objectToAdd)
     {
         if(!RenderManager.renderQueue.contains(objectToAdd))
         {
@@ -116,6 +117,28 @@ public class RenderManager extends JPanel implements Runnable
             System.out.println("E ["+ LocalTime.now()+
                     "] Could not add [."+objectToAdd.toString()+
                     "] to renderQueue, already exists!");
+        }
+    }
+
+    public static synchronized void removeObjectFromRenderQueue(Drawable objectToRemove)
+    {
+        if(RenderManager.renderQueue.contains(objectToRemove))
+        {
+            RenderManager.renderQueue.remove(objectToRemove);
+            System.out.println("I ["+ LocalTime.now()+
+                    "] Successfully deleted [."+objectToRemove.toString()+
+                    "] from renderQueue.");
+            //Sorts the renderQueue by priority of drawable.Drawable Objects
+            Collections.sort(
+                    RenderManager.renderQueue,
+                    new OrderRenderQueueByPriority()
+            );
+        }
+        else
+        {
+            System.out.println("E ["+ LocalTime.now()+
+                    "] Could not delte [."+objectToRemove.toString()+
+                    "] from renderQueue, doesn't exist!");
         }
     }
 }

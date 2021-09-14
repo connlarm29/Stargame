@@ -28,9 +28,6 @@ public class Main
         Ground ground = new Ground();
         ShootingStar shootingStar1 = new ShootingStar(400,64,-1);
 
-        DestructableHouse houseTest = new DestructableHouse(400,410);
-        RenderManager.addObjectToRenderQueue(houseTest);
-
         RenderManager.addObjectToRenderQueue(ground);
         RenderManager.addObjectToRenderQueue(background);
         RenderManager.addObjectToRenderQueue(shootingStar1);
@@ -42,6 +39,7 @@ public class Main
         independently.
          */
         renderManager.startRenderThread(60);
+        HouseObjectSpawner houseTest = new HouseObjectSpawner();
 
 
     }
